@@ -1,0 +1,79 @@
+-- Supported values for orientation:
+-- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
+
+settings = {
+
+    plugins =
+    {
+        ["facebook"] =
+        {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { iphone=true, ["iphone-sim"]=true },
+        },
+        -- key is the name passed to Lua's 'require()'
+        ["CoronaProvider.analytics.flurry"] =
+        {
+            -- required
+            publisherId = "com.coronalabs",            
+        },
+        -- ["plugin.google.iap.v3"] =
+        -- {
+        --     publisherId = "com.coronalabs",
+        --     supportedPlatforms = { android=true }
+        -- },
+
+    },
+	
+	orientation = {
+		default = "portrait",
+		supported = { "portrait", }
+	},
+	android =
+    {
+        versionCode = "1",
+        usesPermissions =
+        {
+            "android.permission.INTERNET",
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+        },
+    },
+	iphone = {
+		plist = {
+
+            UIAppFonts =
+            {
+                -- "ProximaNova-Bold.ttf",
+                -- "ProximaNova-Regular.otf",
+                -- "Bemio.otf",
+                -- "bemio italic.ttf",
+            },
+
+			UIStatusBarHidden = false,
+			UIPrerenderedIcon = true,
+            UIApplicationExitsOnSuspend = false,
+
+            FacebookAppID = "360562410713825",  --replace XXXXXXXXXX with your Facebook App ID
+
+            CFBundleURLTypes = {
+                {
+                CFBundleURLSchemes = { "fb360562410713825", }  --replace XXXXXXXXXX with your Facebook App ID
+                }
+            },
+            ["URL types"] = {
+                item = {
+                    ["URL Schemes"] =
+                        { ["Item 0"] = "fb360562410713825" },  --replace XXXXXXXXXX with your Facebook App ID
+                },
+            }, -- set to false for "shine" overlay
+		}
+	},
+	
+	--[[
+	-- Android permissions
+
+	androidPermissions = {
+  		"android.permission.INTERNET",
+  	},
+
+	]]--
+}
