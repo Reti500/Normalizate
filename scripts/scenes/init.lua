@@ -19,9 +19,16 @@ function scene:show( event )
     local sceneGroup = self.view
     local phase = event.phase
 
-    if phase == "will" then     
+    if phase == "will" then 
           
     elseif phase == "did" then
+
+        local path = system.pathForFile( "data/catanom.csv", system.ResourceDirectory )
+        local file = io.open(path, "r")
+        for lines in file:lines() do
+            print (lines)
+        end
+        io.close(file)
     end 
 end
 

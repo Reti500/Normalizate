@@ -32,6 +32,28 @@ jsonStorage.openData= function(key,filename)
     end
 end
 
+jsonStorage.getkeyValue= function(key,filename, num)
+    
+    key = key or "nil"
+
+    local path = system.pathForFile( filename..".json", system.ResourceDirectory )
+
+    local file = io.open( path, "r" )
+    local jsonData = file:read( "*a" )    
+    io.close( file )
+    file = nil
+
+    if key == "nil" then
+        print( jsonData[num] )
+        return jsonData
+    else
+        local response = json.decode( jsonData )       
+        local decode = response[num][key]
+        print( decode )
+        return decode
+    end
+end
+
 jsonStorage.doesFileExist =  function( fname, path )
 
     local results = false
@@ -51,6 +73,10 @@ jsonStorage.doesFileExist =  function( fname, path )
     end
 
     return results
+end
+
+local function find_key(json, key)
+    
 end
 
 return jsonStorage
