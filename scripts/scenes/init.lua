@@ -1,11 +1,17 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require( "widget" )
+local slide_menu = require ("scripts.scenes.slide_menu")
+local actionbar = require ("scripts.scenes.actionbar")
+
 
 local _W = display.contentWidth
 local _H = display.contentHeight
 local halfW = display.contentCenterX
 local halfH = display.contentCenterY
+
+local productButton
+local searchField 
 
  -- Function to handle button events
 local function handleButtonEvent( event )
@@ -37,25 +43,9 @@ local function textListener( event )
     end
 end
 
-local function addLayer()  
+local function addLayer(sceneGroup)  
 
-    local searchField
-    -- Create text field
-    searchField = native.newTextField( _W*0.43, _H*0.2, _W*0.7, _H*0.07 )
-    searchField:addEventListener( "userInput", textListener )
-    searchField.placeholder = "Buscar"
-    searchField:setReturnKey("search")
-    -- -- Create the widget
-    local searchButton = widget.newButton
-    {
-        id = "searchButton",
-        label = "B",
-        onEvent = handleButtonEvent,
-        width = searchField.width*0.20,
-        height = searchField.height
-    }
-    searchButton.x = _W*0.5+searchField.width*0.5
-    searchButton.y = searchField.y
+   
 
     local normButton = widget.newButton
     {
@@ -65,8 +55,8 @@ local function addLayer()
         width = _W*0.2,
         height = _W*0.2
     }
-    normButton.x = _W*0.23
-    normButton.y = searchField.y+_W*0.3
+    normButton.x = _W*0.25
+    normButton.y = _H*0.2 +_W*0.3
 
     local normMXButton = widget.newButton
     {
@@ -76,17 +66,73 @@ local function addLayer()
         width = _W*0.2,
         height = _W*0.2
     }
-    normMXButton.x = _W*0.7
-    normMXButton.y = searchField.y+_W*0.3
+    normMXButton.x = _W*0.75
+    normMXButton.y = _H*0.2+_W*0.3
+
+    productButton = widget.newButton
+    {
+        id = "productButton",
+        label = "Producto",
+        onEvent = handleButtonEvent,
+        width = _W*0.15,
+        height = _W*0.15
+    }
+    productButton.x = _W*0.5
+    productButton.y = _H*0.55
+
+    local dependenceButton = widget.newButton
+    {
+        id = "dependenceButton",
+        label = "Por Dependencia",
+        onEvent = handleButtonEvent,
+        width = _W*0.15,
+        height = _W*0.15
+    }
+    dependenceButton.x = _W*0.5
+    dependenceButton.y = _H*0.65
+
+    local advancedButton = widget.newButton
+    {
+        id = "advancedButton",
+        label = "Avanzada",
+        onEvent = handleButtonEvent,
+        width = _W*0.15,
+        height = _W*0.15
+    }
+    advancedButton.x = _W*0.5
+    advancedButton.y = _H*0.75
+
+    local directoryButton = widget.newButton
+    {
+        id = "directoryButton",
+        label = "Directorio",
+        onEvent = handleButtonEvent,
+        width = _W*0.15,
+        height = _W*0.15
+    }
+    directoryButton.x = _W*0.5
+    directoryButton.y = _H*0.9
 
 
+    sceneGroup:insert(normButton)
+    sceneGroup:insert(normMXButton)
+    sceneGroup:insert(productButton)
+    sceneGroup:insert(dependenceButton)
+    sceneGroup:insert(advancedButton)
+    sceneGroup:insert(directoryButton)
 end
+
 
 --------------------------------End Functions-------------------------------------------------------------------
 
 -----------------------------------Scenes Functions---------------------------------
 function scene:create( event )
     local sceneGroup = self.view
+    actionbar.create()
+    addLayer(sceneGroup) 
+    slide_menu.create(sceneGroup)
+    productButton:setEnabled(false)
+    
 end
 
 function scene:show( event )
@@ -94,7 +140,10 @@ function scene:show( event )
     local phase = event.phase
 
     if phase == "will" then 
-        addLayer()    
+        
+       
+      
+       
     elseif phase == "did" then
     end 
 end
