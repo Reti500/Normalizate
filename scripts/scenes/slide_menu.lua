@@ -22,15 +22,16 @@ slide_menu.move = true
 ------------Functions.-----------------------------------------------------------------------
 local listener = function( obj )
    --print( "Cerro")
+    listenersButtons(false)
    transition.to( back, { time=200, alpha = 0.43 } )
 end
 
 local listener1 = function( obj )
    --print( "Cerro")
+    listenersButtons(true)
    transition.to( back, { time=200, alpha = 0 } )
 end
-
-local function openMenu( event )
+slide_menu.openClose= function( event )
     if isOpen then
         listenersButtons(true)
         isOpen = false
@@ -73,12 +74,12 @@ local function moveListener(event)
             i = 1
             if math.abs(event.xStart-event.x) > range and dir then
                 print("cerrar")
-                listenersButtons(true)
+                
                 isOpen = false
                 slide_menu.close()
             elseif math.abs(event.xStart-event.x) > range and  dir == false then
                 print("abrir")
-                listenersButtons(false)
+               
                 isOpen = true
                 slide_menu.open()
             else 
@@ -160,7 +161,7 @@ slide_menu.create = function (sceneGroup)
         strokeWidth = 2.5
     }
     chatButton.x = posInit
-    chatButton.y = _H*0.4 
+    chatButton.y = imageProfile.height*1.55
 
     chatIcon = display.newImageRect( "images/slide_menu/chat.png", _W*0.075, _W*0.055)
     chatIcon.x = posInit - offset
