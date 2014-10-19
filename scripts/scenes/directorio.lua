@@ -26,10 +26,9 @@ function scene:show( event )
     local phase = event.phase
 
     if phase == "will" then
-        
-
-        bg = display.newRect( body, 0, 0, _W, 10 )
-        body.y = actionbar.getHeigth()
+        bg = display.newRect( body, _W*0.5, _H*0.5, _W, _H )
+        bg:setFillColor( 68, 68, 68 )
+        body.y = actionbar.getHeight()
     elseif phase == "did" then
     end 
 end

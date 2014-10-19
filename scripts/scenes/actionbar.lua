@@ -102,9 +102,9 @@ local function createBackButton( group )
     }
 
     backButton.width = _W*0.1
-    backButton.height = max_tam - (_H*0.03)
+    backButton.height = max_tam - (_H*0.06)
     backButton.x = (_W*0.02) + backButton.width*0.5
-    backButton.y = backButton.height*0.5 + _H*0.01
+    backButton.y = backButton.height*0.5 + _H*0.02
 
     objects[#objects+1] = backButton
 end
@@ -134,7 +134,7 @@ local function createFindButton( group )
     searchButton.width = _W*0.1
     searchButton.height = max_tam - (_H*0.06)
     searchButton.x = (_W*0.64) + searchButton.width*0.5
-    searchButton.y = _H*0.01 + searchButton.height*0.5
+    searchButton.y = _H*0.01 + searchButton.height*0.4
 
     objects[#objects+1] = searchButton
 end

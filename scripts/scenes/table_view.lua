@@ -10,11 +10,22 @@ local halfW = display.contentCenterX
 local halfH = display.contentCenterY
 local ox, oy = math.abs(display.screenOriginX), math.abs(display.screenOriginY)
 
-local table1 = {}
+local table = {}
+-- table[1] = {}
+
 local search = nil
 
-for i=1,100 do
-    table1[i] = "hola "..i
+---------------------------------------------------------------------------------
+local function onKeyEvent( event )
+    -- Print which key was pressed down/up to the log.
+    local message = "Key '" .. event.keyName .. "' was pressed " .. event.phase
+    --print( message )
+    -- If the "back" key was pressed on Android, then prevent it from backing out of your app.
+    if (event.keyName == "back") and (system.getInfo("platformName") == "Android") and (event.phase == "up") then                           
+        composer.hideOverlay( "fade", 0 )
+    else
+        return false    
+    end
 end
 
 ------------Functions.-----------------------------------------------------------------------
@@ -87,29 +98,36 @@ local function tableView(sceneGroup,table)
         [2] = "PRODUCTO"
     }
 
+    search = string.upper(search)
     local new_table = {}
-    local arrayNMX = db.find_by("NMX", keys, search, nil, 10)
-    local arrayNOM = db.find_by("NOM", keys, search, nil, 10)
+    local arrayNMX = db.find_by("NMX", keys, search, nil, 5)
+    local arrayNOM = db.find_by("NOM", keys, search, nil, 5)
 
     if #arrayNMX > 0 then
-
         for i=1, #arrayNMX do
-            new_table[i] = arrayNMX[i]['TITULO']
+            new_table[#new_table+1] = arrayNMX[i]
         end
-
-        -- table = new_table
     end
 
     if #arrayNOM > 0 then
         for i=1, #arrayNMX do
-            new_table[i] = arrayNMX[i]
+            new_table[#new_table+1] = arrayNMX[i]
         end
     end
 
     if #new_table > 0 then
         table = new_table
     else
-        table = {}
+        -- table = {
+        --     [1] = {
+        --         "TITULO" = "No hay resultados"
+        --     }
+        -- }
+        table[1] = {
+            TITULO = "No hay resultados"
+        }
+        print(#table)
+        
     end
 
     local tableViewColors = {
@@ -146,11 +164,14 @@ local function tableView(sceneGroup,table)
 
         local groupContentHeight = row.contentHeight
         
-        local rowTitle = display.newText( row, table[row.index]['TITULO'], 0, 0, nil, 14 )
-        rowTitle.x = 10
-        rowTitle.anchorX = 0
-        rowTitle.y = groupContentHeight * 0.5       
-        rowTitle:setFillColor( unpack(row.params.defaultLabelColor) )       
+        if (#table > 0) then
+            print(#table)
+            local rowTitle = display.newText( row, table[row.index]['TITULO'], 0, 0, nil, 14 )
+            rowTitle.x = 10
+            rowTitle.anchorX = 0
+            rowTitle.y = groupContentHeight * 0.5       
+            rowTitle:setFillColor( unpack(row.params.defaultLabelColor) )  
+        end     
     end
     
     -- Handle row updates
@@ -247,7 +268,7 @@ function scene:show( event )
 
     if phase == "will" then
         search = event.params['search']
-        tableView(sceneGroup,table1, search)
+        tableView(sceneGroup,table, search)
     elseif phase == "did" then
     end 
 end
