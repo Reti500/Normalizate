@@ -168,8 +168,6 @@ function scene:show( event )
     if phase == "will" then 
         print("show will init.lua")
        
-      
-       
     elseif phase == "did" then
         print("show did init.lua")
     end 
@@ -186,7 +184,6 @@ function scene:hide( event )
         print("hide did init.lua")
     end 
 end
-
 
 function scene:destroy( event )
     local sceneGroup = self.view
