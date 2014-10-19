@@ -102,12 +102,14 @@ local function tableView(sceneGroup,table)
 
     if #arrayNOM > 0 then
         for i=1, #arrayNMX do
-            new_table[i] = arrayNMX[i]['TITULO']
+            new_table[i] = arrayNMX[i]
         end
     end
 
     if #new_table > 0 then
         table = new_table
+    else
+        table = {}
     end
 
     local tableViewColors = {
@@ -133,6 +135,8 @@ local function tableView(sceneGroup,table)
        
         if event.phase == "ended" and table[event.target.index] ~= nil then
             print( "Event.phase is:", table[event.target.index] )
+        else
+            composer.hideOverlay( "fade", 0 )
         end
     end
     -- Handle row rendering
@@ -142,7 +146,7 @@ local function tableView(sceneGroup,table)
 
         local groupContentHeight = row.contentHeight
         
-        local rowTitle = display.newText( row, table[row.index], 0, 0, nil, 14 )
+        local rowTitle = display.newText( row, table[row.index]['TITULO'], 0, 0, nil, 14 )
         rowTitle.x = 10
         rowTitle.anchorX = 0
         rowTitle.y = groupContentHeight * 0.5       
