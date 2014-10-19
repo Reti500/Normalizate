@@ -9,7 +9,7 @@ composer.userData.email = "-"--"nyabe.tabya@gmail.com"
 composer.userData.name = "-"
 composer.userData.lastName = "-"
 composer.userData.id = 0
-composer.userData.token = 0 
+composer.userData.token = 0
 composer.userData.sessionToken = "-"
 composer.userData.sessionExpiry = "-"
 composer.isFacebook = false
@@ -18,4 +18,3 @@ composer.isFacebook = false
 composer.gotoScene( "scripts.scenes.init" )
 
 -- Add any objects that should appear on all scenes below (e.g. tab bar, hud, etc)
-
