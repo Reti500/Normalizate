@@ -31,7 +31,7 @@ local function addLayer_dependence(sceneGroup)
     background.y = _H*0.5
 
     local titleTxt = display.newText( "Busqueda Por Dependencia", _W*0.5, _H*0.1, native.systemFont, 22 )
-    titleTxt:setFillColor( 1, 1,1)
+    titleTxt:setFillColor(1,1,1)
 
     local dependence_id = display.newText( "Dependencia", _W*0.1, _H*0.24, native.systemFont, 17)
     dependence_id.anchorX = 0

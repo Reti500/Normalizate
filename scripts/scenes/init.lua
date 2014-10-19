@@ -84,40 +84,60 @@ function listenersButtons(isActive)
     directoryButton:setEnabled(isActive)
 end
 
-local function addLayer(sceneGroup)     
+local function addLayer(sceneGroup)   
+
+    local background = display.newRect( _W*0.5, _H*0.5, _W, _H )  
+    background:setFillColor(0.85882353)
+
+    logo = display.newImageRect( "images/init/economia.png", _W*0.5, _H*0.1)
+    logo.x = _W*0.5
+    logo.y = _H*0.17
+
+    local titleTxt = display.newText( "Búsqueda por:", _W*0.5, _H*0.25, "Quicksand-Light", 13 )
+    titleTxt:setFillColor(0,0,0)
 
     normButton = widget.newButton
     {
         id = "normButton",
-        label = "NOM",
+        defaultFile = "images/init/nom.png",
+        overFile = "images/init/nom.png",
         onRelease = handleButtonEvent,
-        width = _W*0.2,
-        height = _W*0.2
+        width = _W*0.25,
+        height = _W*0.32
     }
     normButton.x = _W*0.25
-    normButton.y = _H*0.2 +_W*0.3
+    normButton.y = _H*0.15 +_W*0.3
 
     normMXButton = widget.newButton
     {
         id = "normMXButton",
-        label = "NOMX",
+        defaultFile = "images/init/mnx.png",
+        overFile = "images/init/mnx.png",
         onRelease = handleButtonEvent,
-        width = _W*0.2,
-        height = _W*0.2
+        width = _W*0.25,
+        height = _W*0.32
     }
     normMXButton.x = _W*0.75
-    normMXButton.y = _H*0.2+_W*0.3
+    normMXButton.y = _H*0.15+_W*0.3
+
+    
+    backBut = display.newImageRect( "images/init/rueda.png", _W*0.53, _W*0.53)
+    backBut.x = _W*0.5
+    backBut.y = _H*0.63
 
     productButton = widget.newButton
     {
         id = "productButton",
-        label = "Producto",
+        defaultFile = "images/init/producto.png",
+        overFile = "images/init/producto.png",
         onRelease = handleButtonEvent,
-        width = _W*0.15,
-        height = _W*0.15
+        width = _W*0.265,
+        height = _W*0.36
     }
-    productButton.x = _W*0.5
-    productButton.y = _H*0.55
+    productButton.anchorX = 1
+    --productButton.anchorY = 1
+    productButton.x = backBut.x + _W*0.02
+    productButton.y = _H*0.58
 
     dependenceButton = widget.newButton
     {
@@ -144,14 +164,19 @@ local function addLayer(sceneGroup)
     directoryButton = widget.newButton
     {
         id = "directoryButton",
-        label = "Directorio",
         onRelease = handleButtonEvent,
-        width = _W*0.15,
+        defaultFile = "images/init/directorio.png",
+        overFile = "images/init/directorio.png",
+        width = _W*0.75,
         height = _W*0.15
     }
     directoryButton.x = _W*0.5
     directoryButton.y = _H*0.9
 
+    sceneGroup:insert(background)
+    sceneGroup:insert(logo)
+    sceneGroup:insert(titleTxt)
+    sceneGroup:insert(backBut)
     sceneGroup:insert(normButton)
     sceneGroup:insert(normMXButton)
     sceneGroup:insert(productButton)
