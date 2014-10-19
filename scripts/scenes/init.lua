@@ -72,7 +72,7 @@ local function handleButtonEvent( event )
             }
         }
         composer.showOverlay( "scripts.scenes.search", options )
-    elseif  "normButton" == event.target.id  then
+    elseif  "normButton" == event.target.id and event.phase == "ended" then
         if composer.data.normIsActive == false then
             --poner azul
             norm.alpha = 1
@@ -82,7 +82,7 @@ local function handleButtonEvent( event )
             norm.alpha = 0
             composer.data.normIsActive = false
         end 
-    elseif  "normMXButton" == event.target.id  then
+    elseif  "normMXButton" == event.target.id and event.phase == "ended" then
         if composer.data.normMXIsActive == false then
             --poner azul
             normMX.alpha = 1
@@ -169,7 +169,11 @@ local function addLayer(sceneGroup)
     norm = display.newImageRect( "images/init/nom_push.png", _W*0.25, _W*0.32)
     norm.x = normButton.x
     norm.y = normButton.y
-    norm.alpha = 0
+    if composer.data.normIsActive then
+        norm.alpha = 1
+    else
+        norm.alpha = 0
+    end
 
     normMXButton = widget.newButton
     {
@@ -186,6 +190,13 @@ local function addLayer(sceneGroup)
     normMX = display.newImageRect( "images/init/nmx_push.png", _W*0.25, _W*0.32)
     normMX.x = normMXButton.x
     normMX.y = normMXButton.y
+
+    if composer.data.normMXIsActive then
+        normMX.alpha = 1
+    else
+        normMX.alpha = 0
+    end
+
     normMX.alpha = 0
 
     

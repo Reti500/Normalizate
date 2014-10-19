@@ -49,6 +49,10 @@ local function handleButtonEvent( ... )
     print("touch")
 end
 
+local function back( event)  
+    composer.removeScene("scripts.scenes.directorio") 
+    composer.gotoScene( "scripts.scenes.init", "fromRight" )     
+end
 local function init( group )
     contacts = display.newGroup()
 
@@ -114,7 +118,7 @@ local function init( group )
         height = _W*0.1
     }
     mail1.x = _W*0.82
-    mail1.y = ref + _H*0.02
+    mail1.y = line_1.y - _W*0.1
 
     local mail2 = widget.newButton
     {
@@ -126,7 +130,7 @@ local function init( group )
         height = _W*0.1
     }
     mail2.x = _W*0.82
-    mail2.y = ref + _H*0.13
+    mail2.y = line_2.y - _W*0.1
 
     local mail3 = widget.newButton
     {
@@ -138,7 +142,19 @@ local function init( group )
         height = _W*0.1
     }
     mail3.x = _W*0.82
-    mail3.y = ref + _H*0.24
+    mail3.y = line_3.y - _W*0.1
+
+    local back = widget.newButton
+    {
+        id = "back",
+        -- label = "~",
+        onRelease = back,
+        defaultFile = "images/directorio/flecha_roja.png",
+        width = _W*0.14,
+        height = _W*0.14
+    }
+    back.x = _W*0.9
+    back.y = _H-(back.width*0.7)
 
     contacts:insert(text_actions_1)
     contacts:insert(text_actions_2)
@@ -149,6 +165,11 @@ local function init( group )
     contacts:insert(text_name_2)
     contacts:insert(text_name_3)
     contacts:insert(text_name_4)
+
+    contacts:insert(mail1)
+    contacts:insert(mail2)
+    contacts:insert(mail3)
+    contacts:insert(back)
 
     contacts:insert(text_email_1)
     contacts:insert(text_email_2)

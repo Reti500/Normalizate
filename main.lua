@@ -15,7 +15,7 @@ composer.userData.sessionExpiry = "-"
 composer.isFacebook = false
 
 composer.data = {}
-composer.data.normIsActive = false
+composer.data.normIsActive = true
 composer.data.normMXIsActive = false
 
 -- load init
