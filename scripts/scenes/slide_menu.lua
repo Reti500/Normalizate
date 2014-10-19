@@ -16,16 +16,26 @@ local isOpen = false
 local group = display.newGroup()
 local offset = _W *0.15
 local myRectangle = nil
+local back
 slide_menu.move = true
 ------------Functions.-----------------------------------------------------------------------
+local listener = function( obj )
+   --print( "Cerro")
+   transition.to( back, { time=200, alpha = 0.43 } )
+end
+
 local listener1 = function( obj )
    --print( "Cerro")
+   transition.to( back, { time=200, alpha = 0 } )
 end
+
 local function openMenu( event )
     if isOpen then
+        listenersButtons(true)
         isOpen = false
         slide_menu.close()
     else
+        listenersButtons(false)
         isOpen = true
         slide_menu.open()
     end
@@ -100,115 +110,164 @@ slide_menu.create = function (sceneGroup)
     -- close:setFillColor( 0.5 )
     -- close.alpha = 1 
     -- close.id = "close"
-   -- close:addEventListener( "touch", moveListener )   
+   -- close:addEventListener( "touch", moveListener )  
 
-    backgroundMenu = display.newImageRect( "images/slide_menu/background@2x.png", _W*0.5, _H)
-    backgroundMenu.x = posInit
-    backgroundMenu.y = _H*0.6 
-    backgroundMenu.anchorX = 0.5
-    backgroundMenu:toFront()    
+    back = display.newRect( _W*0.75, _H*0.5, _W*2, _H )  
+    back:setFillColor( 0.2 )
+    back.alpha = 0
+    
+    backgroundMenu = display.newRect( posInit,_H*0.6, _W*0.5, _H)
+    backgroundMenu:setFillColor(0.85882353)
 
-    tab = widget.newButton
-    {
-        id = "tab",
-        label = "TAB",
-        onRelease = openMenu,
-        width = _W*0.35,
-        height = _W*0.15
-    }
-    tab.x = _W*0.95
-    tab.y = _H*0.95
+    local line = display.newLine( _W, 0, _W, _H  )
+    line:setStrokeColor(0.7019, 0.101, 0.3450)
+    line.strokeWidth = 4
+    --backgroundMenu.anchorX = 0.5
+    --backgroundMenu:toFront()    
 
-    imageProfile = display.newImageRect( "Icon@2x.png", backgroundMenu.width, _H*0.25)
+    -- tab = widget.newButton
+    -- {
+    --     id = "tab",
+    --     label = "TAB",
+    --     onRelease = openMenu,
+    --     width = _W*0.35,
+    --     height = _W*0.15
+    -- }
+    -- tab.x = _W*0.95
+    -- tab.y = _H*0.95
+
+    imageProfile = display.newImageRect( "Icon@2x.png", backgroundMenu.width, _H*0.27)
     imageProfile.x = posInit
-    imageProfile.y = _H*0.22 
+    imageProfile.y = _H*0.23 
     imageProfile.anchorX = 0.5
     imageProfile:toFront()
-
-    chatIcon = display.newImageRect( "Icon-hdpi.png", _W*0.13, _W*0.13)
-    chatIcon.x = posInit - offset
-    chatIcon.y =  _H*0.4 
 
     chatButton = widget.newButton
     {
         id = "chatButton",
-        label = "Chat",
         onEvent = handleButtonEvent,
-        width = _W*0.35,
-        height = _W*0.15
+        emboss = false,
+        shape="rect",
+        width = backgroundMenu.width-2.5,
+        height =  _W*0.13,
+        fillColor = { default={ 0.85882353,0.85882353,0.85882353, 0.5 }, over={ 0.85882353,0.85882353,0.85882353, 0.5 } },
+        strokeColor = { default={ 0.7019, 0.101, 0.3450, 1 }, over={ 0.8, 0.8, 1, 1 } },
+        strokeWidth = 2.5
     }
-    chatButton.x = chatIcon.x+(offset*1.3)
-    chatButton.y = chatIcon.y
+    chatButton.x = posInit
+    chatButton.y = _H*0.4 
 
-    
-    foroIcon = display.newImageRect( "Icon-hdpi.png", _W*0.13, _W*0.13)
-    foroIcon.x = posInit - offset
-    foroIcon.y = _H*0.48  
+    chatIcon = display.newImageRect( "images/slide_menu/chat.png", _W*0.1, _W*0.08)
+    chatIcon.x = posInit - offset
+    chatIcon.y =  chatButton.y
 
     foroButton = widget.newButton
     {
         id = "foroButton",
-        label = "Foros",
-        onEvent = handleButtonEvent,
-        width = _W*0.35,
-        height = _W*0.15
+       onEvent = handleButtonEvent,
+        emboss = false,
+        shape="rect",
+        width = backgroundMenu.width-2.5,
+        height =  _W*0.13,
+        fillColor = { default={ 0.85882353,0.85882353,0.85882353, 0.5 }, over={ 0.85882353,0.85882353,0.85882353, 0.5 } },
+        strokeColor = { default={ 0.7019, 0.101, 0.3450, 1 }, over={ 0.8, 0.8, 1, 1 } },
+        strokeWidth = 2.5
     }
-    foroButton.x = foroIcon.x+(offset*1.3)
-    foroButton.y = foroIcon.y
+    foroButton.x = posInit
+    foroButton.y = chatButton.y + foroButton.height 
 
 
-
-    favoriteIcon = display.newImageRect( "Icon-hdpi.png", _W*0.13, _W*0.13)
-    favoriteIcon.x = posInit - offset
-    favoriteIcon.y = _H*0.56 
+    foroIcon = display.newImageRect( "images/slide_menu/foro.png", _W*0.1, _W*0.08)
+    foroIcon.x = posInit - offset
+    foroIcon.y = foroButton.y
 
     favoritesButton = widget.newButton
     {
         id = "favoritesButton",
-        label = "Favoritos",
-        onEvent = handleButtonEvent,
-        width = _W*0.35,
-        height = _W*0.15
+       onEvent = handleButtonEvent,
+        emboss = false,
+        shape="rect",
+        width = backgroundMenu.width-2.5,
+        height =  _W*0.13,
+        fillColor = { default={ 0.85882353,0.85882353,0.85882353, 0.5 }, over={ 0.85882353,0.85882353,0.85882353, 0.5 } },
+        strokeColor = { default={ 0.7019, 0.101, 0.3450, 1 }, over={ 0.8, 0.8, 1, 1 } },
+        strokeWidth = 2.5
     }
-    favoritesButton.x = favoriteIcon.x+(offset*1.3)
-    favoritesButton.y = favoriteIcon.y
+    favoritesButton.x = posInit 
+    favoritesButton.y = foroButton.y + favoritesButton.height
 
 
-    agendaIcon = display.newImageRect( "Icon-hdpi.png", _W*0.13, _W*0.13)
-    agendaIcon.x = posInit - offset
-    agendaIcon.y = _H*0.64     
+    favoriteIcon = display.newImageRect( "images/slide_menu/favorito.png", _W*0.08, _W*0.08)
+    favoriteIcon.x = posInit - offset
+    favoriteIcon.y = favoritesButton.y
 
+
+    
     agendaButton = widget.newButton
     {
         id = "agendaButton",
-        label = "Agenda",
-        onEvent = handleButtonEvent,
-        width = _W*0.35,
-        height = _W*0.15
+       onEvent = handleButtonEvent,
+        emboss = false,
+        shape="rect",
+        width = backgroundMenu.width-2.5,
+        height =  _W*0.13,
+        fillColor = { default={ 0.85882353,0.85882353,0.85882353, 0.5 }, over={ 0.85882353,0.85882353,0.85882353, 0.5 } },
+        strokeColor = { default={ 0.7019, 0.101, 0.3450, 1 }, over={ 0.8, 0.8, 1, 1 } },
+        strokeWidth = 2.5
     }
-    agendaButton.x = agendaIcon.x+(offset*1.3)
-    agendaButton.y = agendaIcon.y   
+    agendaButton.x = posInit
+    agendaButton.y = favoritesButton.y + agendaButton.height  
 
-    settingsIcon = display.newImageRect( "Icon-hdpi.png", _W*0.13, _W*0.13)
-    settingsIcon.x = posInit - offset
-    settingsIcon.y = _H*0.9 
+    agendaIcon = display.newImageRect( "images/slide_menu/agenda.png", _W*0.1, _W*0.08)
+    agendaIcon.x = posInit - offset
+    agendaIcon.y = agendaButton.y  
+
 
     settingsButton = widget.newButton
     {
         id = "settingsButton",
-        label = "Ajustes",
-        onEvent = handleButtonEvent,
-        width = _W*0.35,
-        height = _W*0.15
+       onEvent = handleButtonEvent,
+        emboss = false,
+        shape="rect",
+        width = backgroundMenu.width-2.5,
+        height =  _W*0.13,
+        fillColor = { default={ 0.85882353,0.85882353,0.85882353, 0.5 }, over={ 0.85882353,0.85882353,0.85882353, 0.5 } },
+        strokeColor = { default={ 0.7019, 0.101, 0.3450, 1 }, over={ 0.8, 0.8, 1, 1 } },
+        strokeWidth = 2.5
     }
-    settingsButton.x = settingsIcon .x+(offset*1.3)
-    settingsButton.y = settingsIcon.y   
-    
+    settingsButton.x = posInit
+    settingsButton.y = _H - (settingsButton.height*0.5)
 
-    group:insert( backgroundMenu )
-    group:insert( tab )
+    settingsIcon = display.newImageRect( "images/slide_menu/ajustes.png", _W*0.08, _W*0.08)
+    settingsIcon.x = posInit - offset
+    settingsIcon.y = settingsButton.y
+
+    local chatTxt = display.newText( "Chat", chatButton.x  - (offset*0.5) ,chatButton.y, "Quicksand-Regular", 18 )
+    chatTxt.anchorX = 0
+    chatTxt:setFillColor(0,0,0)
+
+    local foroTxt = display.newText( "Foros", foroButton.x  - (offset*0.5),foroButton.y, "Quicksand-Regular", 18 )
+    foroTxt.anchorX = 0
+    foroTxt:setFillColor(0,0,0)  
+
+    local favoritesTxt = display.newText( "Favoritos", favoritesButton.x - (offset*0.5) ,favoritesButton.y, "Quicksand-Regular", 18 )
+    favoritesTxt.anchorX = 0
+    favoritesTxt:setFillColor(0,0,0)  
+    
+    local agendaTxt = display.newText( "Agenda", agendaButton.x - (offset*0.5) ,agendaButton.y, "Quicksand-Regular", 18 )
+    agendaTxt.anchorX = 0
+    agendaTxt:setFillColor(0,0,0) 
+
+    local settingsTxt = display.newText( "Ajustes", settingsButton.x - (offset*0.5) ,settingsButton.y, "Quicksand-Regular", 18 )
+    settingsTxt.anchorX = 0
+    settingsTxt:setFillColor(0,0,0)  
+    
+    group:insert( back )    
+    group:insert( backgroundMenu )   
+    --group:insert( tab )   
     --group:insert( close )
     group:insert( imageProfile )
+   
     group:insert( chatButton )
     group:insert( chatIcon )    
     group:insert( foroButton )
@@ -219,12 +278,18 @@ slide_menu.create = function (sceneGroup)
     group:insert( agendaIcon )
     group:insert( settingsButton )
     group:insert( settingsIcon )
+    group:insert(chatTxt)
+    group:insert(foroTxt)
+    group:insert(favoritesTxt)
+    group:insert(agendaTxt)
+    group:insert(settingsTxt)
+     group:insert( line )
 
     --sceneGroup:insert(group)
 end
 slide_menu.open = function()
    -- transition.to( backgroundMenu, { time=200, x=_W*0.75, onComplete=listener1 } )
-    transition.to( group, { time=200, x=-_W*0.5, onComplete=listener1 } )
+    transition.to( group, { time=200, x=-_W*0.5, onComplete=listener } )
 end
 
 slide_menu.close = function()
