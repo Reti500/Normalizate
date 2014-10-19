@@ -1,6 +1,8 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
 local slide_menu = require ("scripts.scenes.slide_menu")
+local db = require( "scripts.libs.db" )
+local actionbar = require( "scripts.scenes.actionbar" )
 local scene = composer.newScene()
 
 local _W = display.contentWidth
@@ -18,8 +20,27 @@ local up,down
 local offset = _W *0.2
 local group = display.newGroup()
 
+local ox, oy = math.abs(display.screenOriginX), math.abs(display.screenOriginY)
 
+local sceneGroup
+
+local arrayNMX = nil
+local arrayNOM = nil
+
+local current_button = nil
+local current_search = nil
 ------------Functions.-----------------------------------------------------------------------
+
+local function gatDataKey( keys, search )
+    arrayNOM = db.find_by("NOM", keys, search)
+end
+
+local function getData(keys, search)
+    -- local arrayNMX = db.find_by("NMX", keys, search)
+    -- local arrayNOM = db.find_by("NOM", keys, search)
+    -- arrayNMX = db.get_all( "NMX", keys )
+    arrayNOM = db.get_all( "NOM", keys )
+end
 
 local function close(event)
     print("hola")
@@ -33,11 +54,23 @@ end
 
 local function move( event )
     if canMove then
-        canMove = false
+        -- canMove = false
+        current_button = event.target
         event.target:setLabel("hola")
         transition.to( group, { time=500, x=-_W} )
     end
 end
+
+
+local function item_return( event )
+    if canMove then
+        -- canMove = false
+        -- event.target:setLabel("hola")
+        -- current_button:setLabel(table[event.target.index])
+        transition.to( group, { time=500, x=0} )
+    end
+end
+
 local function inputListener( event )
     if event.phase == "began" then
 
@@ -222,27 +255,28 @@ local function addLayer_product(sceneGroup)
     sceneGroup:insert(list)
 end
 
-local function tableView(sceneGroup,table)
+local function tableView(sceneGroup)
 
-    local keys = {
-        [1] = "TITULO",
-        [2] = "PRODUCTO"
-    }
+    -- local keys = {
+    --     [1] = "TITULO",
+    --     [2] = "PRODUCTO"
+    -- }
 
-    search = string.upper(search)
+    -- search = string.upper(search)
     local new_table = {}
-    local arrayNMX = db.find_by("NMX", keys, search, nil, 5)
-    local arrayNOM = db.find_by("NOM", keys, search, nil, 5)
+    local table = {}
+    -- local arrayNMX = db.find_by("NMX", keys, search, nil, 5)
+    -- local arrayNOM = db.find_by("NOM", keys, search, nil, 5)
 
-    if #arrayNMX > 0 then
-        for i=1, #arrayNMX do
-            new_table[#new_table+1] = arrayNMX[i]
-        end
-    end
+    -- if #arrayNMX > 0 then
+    --     for i=1, #arrayNMX do
+    --         new_table[#new_table+1] = arrayNMX[i]
+    --     end
+    -- end
 
     if #arrayNOM > 0 then
-        for i=1, #arrayNMX do
-            new_table[#new_table+1] = arrayNMX[i]
+        for i=1, #arrayNOM do
+            new_table[#new_table+1] = arrayNOM[i]
         end
     end
 
@@ -283,9 +317,12 @@ local function tableView(sceneGroup,table)
         local phase = event.phase
        
         if event.phase == "ended" and table[event.target.index] ~= nil then
+            item_return()
+            current_button:setLabel(table[event.target.index])
+            current_search = table[event.target.index]
             print( "Event.phase is:", table[event.target.index] )
         else
-            composer.hideOverlay( "fade", 0 )
+            -- composer.hideOverlay( "fade", 0 )
         end
     end
     -- Handle row rendering
@@ -297,7 +334,7 @@ local function tableView(sceneGroup,table)
         
         if (#table > 0) then
             print(#table)
-            local rowTitle = display.newText( row, table[row.index]['TITULO'], 0, 0, nil, 14 )
+            local rowTitle = display.newText( row, table[row.index], 0, 0, nil, 14 )
             rowTitle.x = 10
             rowTitle.anchorX = 0
             rowTitle.y = groupContentHeight * 0.5       
@@ -323,7 +360,7 @@ local function tableView(sceneGroup,table)
     tableView = widget.newTableView
     {
         top = actionbar.getHeight(),
-        left = -ox,
+        left = _W, ---ox,
         width = display.contentWidth+ox+ox, 
         height = display.contentHeight,--+oy+oy-32,
         hideBackground = true,
@@ -334,13 +371,13 @@ local function tableView(sceneGroup,table)
     }
     sceneGroup:insert( tableView )
 
-    local keys = {
-        [1] = "TITULO",
-        [2] = "PRODUCTO"
-    }
+    -- local keys = {
+    --     [1] = "TITULO",
+    --     [2] = "PRODUCTO"
+    -- }
 
-    local arrayNMX = db.find_by("NMX", keys, search)
-    local arrayNOM = db.find_by("NOM", keys, search)
+    -- local arrayNMX = db.find_by("NMX", keys, search)
+    -- local arrayNOM = db.find_by("NOM", keys, search)
 
     -- tableView:insertRow
     -- {
@@ -387,6 +424,30 @@ local function tableView(sceneGroup,table)
     end
 end
 --------------------------------End Functions-------------------------------------------------------------------
+
+local function handleButtonEvent( ... )
+    if current_search == null then
+        return
+    end
+
+    local options = 
+        {
+            effect = "fade",
+            time = 500,
+            isModal = true,
+            params = 
+            {
+                search = current_search,
+            }
+        }
+
+    composer.hideOverlay( "scripts.scenes.search" )
+    composer.gotoScene( "scripts.scenes.search_table", options )
+    
+    -- gatDataKey( "TITULO", current_search )
+    -- composer.hideOverlay( "scripts.scenes.search" )
+    -- tableView()
+end
 
 -----------------------------------Scenes Functions---------------------------------
 function scene:create( event )
@@ -439,15 +500,20 @@ function scene:show( event )
         group:insert(background)
         group:insert(searchButton)
 
-      
+      --- AQUI
 
         if search_type == "advance" then   
             addLayer_advance(group)
-            --tableView(group,table)
+            getData("PRODUCTO", "")
+            tableView(group, {})
         elseif search_type == "dependence" then
-             addLayer_dependence(group)
+            addLayer_dependence(group)
+            getData("DEPENDENCIA", "")
+            tableView(group, {})
         elseif search_type == "product" then
             addLayer_product(group)
+            getData("PRODUCTO", "")
+            tableView(group, {})
         end
         slide_menu.move = false
         sceneGroup:insert(group)

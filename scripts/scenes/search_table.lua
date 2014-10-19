@@ -260,6 +260,8 @@ end
 -----------------------------------Scenes Functions---------------------------------
 function scene:create( event )
     local sceneGroup = self.view
+
+    actionbar.create( sceneGroup )
 end
 
 function scene:show( event )
