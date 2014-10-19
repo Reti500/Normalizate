@@ -19,9 +19,48 @@ local dependenceButton
 local advancedButton
 local directoryButton
 
+
+local function onKeyEvent( event )
+-- Print which key was pressed down/up to the log.
+    local message = "Key '" .. event.keyName .. "' was pressed " .. event.phase
+    --print( message )
+    -- If the "back" key was pressed on Android, then prevent it from backing out of your app.
+    if (event.keyName == "back") and (system.getInfo("platformName") == "Android") and (event.phase == "up") then                           
+        local function onComplete( event )
+            if "clicked" == event.action then
+                local i = event.index
+                if 1 == i then
+                -- Do nothing; dialog will simply dismiss
+                elseif 2 == i then
+                  native.requestExit()
+                end
+            end
+            
+        end
+        local alert = native.showAlert( "Normalizate", "Desea salir de la Applicación? ", {"Cancelar", "Salir" }, onComplete )
+        return true
+    else
+        return false    
+    end
+end
+
  -- Function to handle button events
 local function handleButtonEvent( event )
-    if  "advancedButton" == event.target.id  then
+    if  "advancedButton" == event.target.id and event.phase == "began" then
+        print("mostrando")
+         backBut_avanzado.alpha = 1
+    elseif  "dependenceButton" == event.target.id and event.phase == "began" then
+        print("mostrando")
+         backBut_dependencia.alpha = 1
+    elseif  "productButton" == event.target.id and event.phase == "began" then
+        print("mostrando")
+         backBut_producto.alpha = 1
+    else
+        backBut_avanzado.alpha = 0
+        backBut_dependencia.alpha = 0
+        backBut_producto.alpha = 0
+    end
+    if  "advancedButton" == event.target.id  and event.phase == "ended" then
         local options = 
         {
             effect = "fade",
@@ -34,8 +73,15 @@ local function handleButtonEvent( event )
         }
         composer.showOverlay( "scripts.scenes.search", options )
     elseif  "normButton" == event.target.id  then
-        composer.showOverlay( "scripts.scenes.one_result", options )
-    elseif  "dependenceButton" == event.target.id  then
+        if composer.data.normIsActive == false then
+            --poner azul
+            composer.data.normIsActive = true
+        else 
+            --poner  normal
+            composer.data.normIsActive = false
+        end 
+        --composer.showOverlay( "scripts.scenes.one_result", options )
+    elseif  "dependenceButton" == event.target.id and event.phase == "ended"  then
         local options = 
             {
                 effect = "fade",
@@ -47,7 +93,7 @@ local function handleButtonEvent( event )
                 }
             }
         composer.showOverlay( "scripts.scenes.search", options )
-    elseif  "productButton" == event.target.id  then
+    elseif  "productButton" == event.target.id  and event.phase == "ended" then
         local options = 
         {
             effect = "fade",
@@ -100,7 +146,7 @@ local function addLayer(sceneGroup)
     {
         id = "normButton",
         defaultFile = "images/init/nom.png",
-        overFile = "images/init/nom.png",
+        overFile = "images/init/nom_push.png",
         onRelease = handleButtonEvent,
         width = _W*0.25,
         height = _W*0.32
@@ -111,8 +157,8 @@ local function addLayer(sceneGroup)
     normMXButton = widget.newButton
     {
         id = "normMXButton",
-        defaultFile = "images/init/mnx.png",
-        overFile = "images/init/mnx.png",
+        defaultFile = "images/init/nmx.png",
+        overFile = "images/init/nmx_push.png",
         onRelease = handleButtonEvent,
         width = _W*0.25,
         height = _W*0.32
@@ -125,41 +171,60 @@ local function addLayer(sceneGroup)
     backBut.x = _W*0.5
     backBut.y = _H*0.63
 
+    backBut_avanzado = display.newImageRect( "images/init/rueda_avanzado.png", _W*0.53, _W*0.53)
+    backBut_avanzado.x = _W*0.5
+    backBut_avanzado.y = _H*0.63
+    backBut_avanzado.alpha = 0
+
+    backBut_dependencia = display.newImageRect( "images/init/rueda_dependencia.png", _W*0.53, _W*0.53)
+    backBut_dependencia.x = _W*0.5
+    backBut_dependencia.y = _H*0.63
+    backBut_dependencia.alpha = 0
+
+    backBut_producto = display.newImageRect( "images/init/rueda_producto.png", _W*0.53, _W*0.53)
+    backBut_producto.x = _W*0.5
+    backBut_producto.y = _H*0.63
+    backBut_producto.alpha = 0
+
     productButton = widget.newButton
     {
         id = "productButton",
-        defaultFile = "images/init/producto.png",
-        overFile = "images/init/producto.png",
-        onRelease = handleButtonEvent,
-        width = _W*0.265,
-        height = _W*0.36
+        defaultFile = "images/init/producto_icon.png",
+        overFile = "images/init/producto_icon.png",
+        onEvent = handleButtonEvent,
+        width = _W*0.21,
+        height = _W*0.16
     }
     productButton.anchorX = 1
-    --productButton.anchorY = 1
-    productButton.x = backBut.x + _W*0.02
+    productButton.x = backBut.x *0.95
     productButton.y = _H*0.58
-
-    dependenceButton = widget.newButton
-    {
-        id = "dependenceButton",
-        label = "Por Dependencia",
-        onRelease = handleButtonEvent,
-        width = _W*0.15,
-        height = _W*0.15
-    }
-    dependenceButton.x = _W*0.5
-    dependenceButton.y = _H*0.65
 
     advancedButton = widget.newButton
     {
         id = "advancedButton",
-        label = "Avanzada",
-        onRelease = handleButtonEvent,
-        width = _W*0.15,
-        height = _W*0.15
+        defaultFile = "images/init/avanzado_icon.png",
+        overFile = "images/init/avanzado_icon.png",
+        onEvent = handleButtonEvent,
+        width = _W*0.21,
+        height = _W*0.16
     }
-    advancedButton.x = _W*0.5
-    advancedButton.y = _H*0.75
+    advancedButton.x = backBut.x *1.25
+    advancedButton.y =_H*0.58
+   -- advancedButton:setFillColor(1,0,0)
+
+
+    dependenceButton = widget.newButton
+    {
+        id = "dependenceButton",
+       defaultFile = "images/init/dependencia_icon.png",
+        overFile = "images/init/dependencia_icon.png",
+        onEvent = handleButtonEvent,
+        width = _W*0.28,
+        height = _W*0.14
+    }
+    dependenceButton.x = _W*0.5
+    dependenceButton.y = _H*0.7
+
 
     directoryButton = widget.newButton
     {
@@ -175,8 +240,12 @@ local function addLayer(sceneGroup)
 
     sceneGroup:insert(background)
     sceneGroup:insert(logo)
-    sceneGroup:insert(titleTxt)
-    sceneGroup:insert(backBut)
+    sceneGroup:insert(titleTxt)  
+    sceneGroup:insert(backBut)  
+    sceneGroup:insert(backBut_avanzado)
+    sceneGroup:insert(backBut_dependencia)
+    sceneGroup:insert(backBut_producto)
+    
     sceneGroup:insert(normButton)
     sceneGroup:insert(normMXButton)
     sceneGroup:insert(productButton)
@@ -190,9 +259,6 @@ end
 function scene:create( event )
     local sceneGroup = self.view
     print("create init.lua")
-    actionbar.create(sceneGroup)
-    addLayer(sceneGroup) 
-    slide_menu.create(sceneGroup)
 end
 
 function scene:show( event )
@@ -201,7 +267,10 @@ function scene:show( event )
 
     if phase == "will" then 
         print("show will init.lua")
-       
+        addLayer(sceneGroup) 
+        slide_menu.create(sceneGroup)
+        actionbar.create(sceneGroup)
+        Runtime:addEventListener( "key", onKeyEvent )
     elseif phase == "did" then
         print("show did init.lua")
     end 
@@ -213,7 +282,7 @@ function scene:hide( event )
     
     if event.phase == "will" then
         print("hide will init.lua")
-      
+        Runtime:removeEventListener( "key", onKeyEvent )    
     elseif phase == "did" then
         print("hide did init.lua")
     end 
@@ -222,6 +291,7 @@ end
 function scene:destroy( event )
     local sceneGroup = self.view
     print("destroy init.lua")
+    Runtime:removeEventListener( "key", onKeyEvent )    
 
 end
 ------------------------------End Funcitons--------------------------------------

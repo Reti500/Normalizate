@@ -20,7 +20,7 @@ local searchButton = nil
 local notificationButton = nil
 local menuButton = nil
 
-actionbar.getHeigth = function()
+actionbar.getHeight = function()
     return max_tam
 end
 

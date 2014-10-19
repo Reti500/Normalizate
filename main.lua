@@ -14,7 +14,11 @@ composer.userData.sessionToken = "-"
 composer.userData.sessionExpiry = "-"
 composer.isFacebook = false
 
+composer.data = {}
+composer.data.normIsActive = false
+composer.data.normMXIsActive = false
+
 -- load init
-composer.gotoScene( "scripts.scenes.init" )
+composer.gotoScene( "scripts.scenes.splash" )
 
 -- Add any objects that should appear on all scenes below (e.g. tab bar, hud, etc)
