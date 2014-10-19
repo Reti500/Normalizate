@@ -11,7 +11,21 @@ local halfW = display.contentCenterX
 local halfH = display.contentCenterY
 
 local productButton
-local searchField 
+ 
+local normButton
+local normMXButton
+local productButton
+local dependenceButton
+local advancedButton
+local directoryButton
+
+buttons = {}
+buttons[1] = productButton
+buttons[2] = normButton
+buttons[3] = normMXButton
+buttons[4] = dependenceButton
+buttons[5] = advancedButton
+buttons[6] = directoryButton
 
  -- Function to handle button events
 local function handleButtonEvent( event )
@@ -20,34 +34,18 @@ local function handleButtonEvent( event )
     end
 end
 
-local function textListener( event )
-
-    if ( event.phase == "began" ) then
-
-        -- user begins editing text field
-        print( event.text )
-
-    elseif ( event.phase == "ended" or event.phase == "submitted" ) then
-
-        -- text field loses focus
-        -- do something with defaultField's text
-        print( "Submitted text: " .. event.target.text )
-
-    elseif ( event.phase == "editing" ) then
-
-        print( event.newCharacters )
-        print( event.oldText )
-        print( event.startPosition )
-        print( event.text )
-
-    end
+function listenersButtons(isActive)
+    productButton:setEnabled(isActive)
+    normButton:setEnabled(isActive)
+    normMXButton:setEnabled(isActive)
+    dependenceButton:setEnabled(isActive)
+    advancedButton:setEnabled(isActive)
+    directoryButton:setEnabled(isActive)
 end
 
-local function addLayer(sceneGroup)  
+local function addLayer(sceneGroup)     
 
-   
-
-    local normButton = widget.newButton
+    normButton = widget.newButton
     {
         id = "normButton",
         label = "NOM",
@@ -58,7 +56,7 @@ local function addLayer(sceneGroup)
     normButton.x = _W*0.25
     normButton.y = _H*0.2 +_W*0.3
 
-    local normMXButton = widget.newButton
+    normMXButton = widget.newButton
     {
         id = "normMXButton",
         label = "NOMX",
@@ -80,7 +78,7 @@ local function addLayer(sceneGroup)
     productButton.x = _W*0.5
     productButton.y = _H*0.55
 
-    local dependenceButton = widget.newButton
+    dependenceButton = widget.newButton
     {
         id = "dependenceButton",
         label = "Por Dependencia",
@@ -91,7 +89,7 @@ local function addLayer(sceneGroup)
     dependenceButton.x = _W*0.5
     dependenceButton.y = _H*0.65
 
-    local advancedButton = widget.newButton
+    advancedButton = widget.newButton
     {
         id = "advancedButton",
         label = "Avanzada",
@@ -102,7 +100,7 @@ local function addLayer(sceneGroup)
     advancedButton.x = _W*0.5
     advancedButton.y = _H*0.75
 
-    local directoryButton = widget.newButton
+    directoryButton = widget.newButton
     {
         id = "directoryButton",
         label = "Directorio",
@@ -113,7 +111,6 @@ local function addLayer(sceneGroup)
     directoryButton.x = _W*0.5
     directoryButton.y = _H*0.9
 
-
     sceneGroup:insert(normButton)
     sceneGroup:insert(normMXButton)
     sceneGroup:insert(productButton)
@@ -121,8 +118,6 @@ local function addLayer(sceneGroup)
     sceneGroup:insert(advancedButton)
     sceneGroup:insert(directoryButton)
 end
-
-
 --------------------------------End Functions-------------------------------------------------------------------
 
 -----------------------------------Scenes Functions---------------------------------
@@ -131,8 +126,6 @@ function scene:create( event )
     actionbar.create()
     addLayer(sceneGroup) 
     slide_menu.create(sceneGroup)
-    productButton:setEnabled(false)
-    
 end
 
 function scene:show( event )
