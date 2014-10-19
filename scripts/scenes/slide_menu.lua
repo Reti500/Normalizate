@@ -1,6 +1,7 @@
 local slide_menu = {}
 local composer = require( "composer" )
 local widget = require( "widget" )
+local actionbar = require ("scripts.scenes.actionbar")
 
 local _W = display.contentWidth
 local _H = display.contentHeight
@@ -14,7 +15,7 @@ local range = _W*0.07
 local posInit = _W*1.25 -- _W*1.25
 local isOpen = false
 local group = display.newGroup()
-local offset = _W *0.15
+local offset = _W *0.17
 local myRectangle = nil
 local back
 slide_menu.move = true
@@ -100,6 +101,7 @@ end
 
 slide_menu.create = function (sceneGroup)
     
+    local limit_actionbar = actionbar.getHeight()
 
     myRectangle = display.newRect( _W*0.5, _H*0.5, _W, _H )  
     myRectangle:setFillColor( 0.5 )
@@ -112,14 +114,16 @@ slide_menu.create = function (sceneGroup)
     -- close.id = "close"
    -- close:addEventListener( "touch", moveListener )  
 
-    back = display.newRect( _W*0.75, _H*0.5, _W*2, _H )  
+    back = display.newRect( _W*0.75, limit_actionbar, _W*2, _H )  
     back:setFillColor( 0.2 )
+    back.anchorY = 0
     back.alpha = 0
     
-    backgroundMenu = display.newRect( posInit,_H*0.6, _W*0.5, _H)
+    backgroundMenu = display.newRect( posInit,limit_actionbar, _W*0.5, _H)
+    backgroundMenu.anchorY = 0
     backgroundMenu:setFillColor(0.85882353)
 
-    local line = display.newLine( _W, 0, _W, _H  )
+    local line = display.newLine( _W, limit_actionbar, _W, _H  )
     line:setStrokeColor(0.7019, 0.101, 0.3450)
     line.strokeWidth = 4
     --backgroundMenu.anchorX = 0.5
@@ -136,10 +140,11 @@ slide_menu.create = function (sceneGroup)
     -- tab.x = _W*0.95
     -- tab.y = _H*0.95
 
-    imageProfile = display.newImageRect( "Icon@2x.png", backgroundMenu.width, _H*0.27)
+    imageProfile = display.newImageRect( "Icon@2x.png", backgroundMenu.width, _H*0.281)
     imageProfile.x = posInit
-    imageProfile.y = _H*0.23 
+    imageProfile.y = limit_actionbar
     imageProfile.anchorX = 0.5
+    imageProfile.anchorY = 0
     imageProfile:toFront()
 
     chatButton = widget.newButton
@@ -157,7 +162,7 @@ slide_menu.create = function (sceneGroup)
     chatButton.x = posInit
     chatButton.y = _H*0.4 
 
-    chatIcon = display.newImageRect( "images/slide_menu/chat.png", _W*0.1, _W*0.08)
+    chatIcon = display.newImageRect( "images/slide_menu/chat.png", _W*0.075, _W*0.055)
     chatIcon.x = posInit - offset
     chatIcon.y =  chatButton.y
 
@@ -177,7 +182,7 @@ slide_menu.create = function (sceneGroup)
     foroButton.y = chatButton.y + foroButton.height 
 
 
-    foroIcon = display.newImageRect( "images/slide_menu/foro.png", _W*0.1, _W*0.08)
+    foroIcon = display.newImageRect( "images/slide_menu/foro.png",_W*0.075, _W*0.055)
     foroIcon.x = posInit - offset
     foroIcon.y = foroButton.y
 
@@ -197,7 +202,7 @@ slide_menu.create = function (sceneGroup)
     favoritesButton.y = foroButton.y + favoritesButton.height
 
 
-    favoriteIcon = display.newImageRect( "images/slide_menu/favorito.png", _W*0.08, _W*0.08)
+    favoriteIcon = display.newImageRect( "images/slide_menu/favorito.png",_W*0.055, _W*0.055)
     favoriteIcon.x = posInit - offset
     favoriteIcon.y = favoritesButton.y
 
@@ -218,7 +223,7 @@ slide_menu.create = function (sceneGroup)
     agendaButton.x = posInit
     agendaButton.y = favoritesButton.y + agendaButton.height  
 
-    agendaIcon = display.newImageRect( "images/slide_menu/agenda.png", _W*0.1, _W*0.08)
+    agendaIcon = display.newImageRect( "images/slide_menu/agenda.png", _W*0.075, _W*0.055)
     agendaIcon.x = posInit - offset
     agendaIcon.y = agendaButton.y  
 
@@ -238,7 +243,7 @@ slide_menu.create = function (sceneGroup)
     settingsButton.x = posInit
     settingsButton.y = _H - (settingsButton.height*0.5)
 
-    settingsIcon = display.newImageRect( "images/slide_menu/ajustes.png", _W*0.08, _W*0.08)
+    settingsIcon = display.newImageRect( "images/slide_menu/ajustes.png",_W*0.055, _W*0.055)
     settingsIcon.x = posInit - offset
     settingsIcon.y = settingsButton.y
 
