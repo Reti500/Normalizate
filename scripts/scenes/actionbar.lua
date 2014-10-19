@@ -1,5 +1,6 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
+local db = require( "scripts.libs.db" )
 
 local actionbar = {}
 local objects = {}
@@ -11,7 +12,7 @@ local halfH = display.contentCenterY
 local path = "images/action_bar/"
 local backgroundMenu = nil
 local actionbarGroup = nil
-local max_tam = _H*0.08
+local max_tam = _H*0.12
 
 local background = nil
 local backButton = nil
@@ -20,22 +21,30 @@ local searchButton = nil
 local notificationButton = nil
 local menuButton = nil
 
-actionbar.getHeigth = function()
+local init_time = nil
+local resultsList = nil
+
+actionbar.getHeight = function()
     return max_tam
 end
 
-local function tablelength(T)
-  local count = 0
-  for _ in pairs(T) do count = count + 1 end
-  return count
-end
 
 local function textListener( event )
 
     if ( event.phase == "began" ) then
 
         -- user begins editing text field
-        print( event.text )
+        -- print( event.text )
+        -- local keys = {
+        --     [1] = "TITULO",
+        --     [2] = "PRODUCTO"
+        -- }
+
+        -- local array = db.find_by("NMX", keys, tostring(event.text))
+        -- for k,v in pairs(array) do
+        --     print(k)
+        -- end
+        init_time = os.time( t )
 
     elseif ( event.phase == "ended" or event.phase == "submitted" ) then
 
@@ -44,12 +53,33 @@ local function textListener( event )
         print( "Submitted text: " .. event.target.text )
 
     elseif ( event.phase == "editing" ) then
+        local search = tostring(event.text)
 
-        print( event.newCharacters )
-        print( event.oldText )
-        print( event.startPosition )
-        print( event.text )
+        local options = 
+        {
+            time = 0,
+            isModal = true,
+            params = 
+            {
+                search = search,
+            }
+        }
+        -- local keys = {
+        --     [1] = "TITULO",
+        --     [2] = "PRODUCTO"
+        -- }
 
+        -- local array = db.find_by("NMX", keys, tostring(event.text))
+        -- print(#array)
+        -- for k,v in pairs(array) do
+        --     print(v)
+        -- end
+        
+        if (string.len(search) > 0) then
+            composer.showOverlay("scripts.scenes.table_view", options)
+        else
+            composer.hideOverlay( "fade", 400 )
+        end
     end
 end
 
@@ -102,7 +132,7 @@ local function createFindButton( group )
     }
 
     searchButton.width = _W*0.1
-    searchButton.height = max_tam - (_H*0.03)
+    searchButton.height = max_tam - (_H*0.06)
     searchButton.x = (_W*0.64) + searchButton.width*0.5
     searchButton.y = _H*0.01 + searchButton.height*0.5
 
@@ -157,6 +187,8 @@ actionbar.create = function (group, components)
         [5] = createMenuButton
     }
 
+    db.init()
+
     components = components or {true, true, true, true, true}
 
     createBackGround( actionbarGroup )
@@ -173,7 +205,7 @@ actionbar.create = function (group, components)
 
     -- actionbarGroup.x, actionbarGroup.y = 0, 0
 
-    -- actionbarGroup:toBack()
+    actionbarGroup:toBack()
 
     group:insert( actionbarGroup )
 end

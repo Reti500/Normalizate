@@ -1,6 +1,8 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require( "widget" )
+local actionbar = require( "scripts.scenes.actionbar")
+local db = require( "scripts.libs.db")
 
 local _W = display.contentWidth
 local _H = display.contentHeight
@@ -9,6 +11,8 @@ local halfH = display.contentCenterY
 local ox, oy = math.abs(display.screenOriginX), math.abs(display.screenOriginY)
 
 local table1 = {}
+local search = nil
+
 for i=1,100 do
     table1[i] = "hola "..i
 end
@@ -75,8 +79,36 @@ local function Date( ... )
 
     print( currentMonth, currentDay, currentYear )
 end
+
 local function tableView(sceneGroup,table)
 
+    local keys = {
+        [1] = "TITULO",
+        [2] = "PRODUCTO"
+    }
+
+    local new_table = {}
+    local arrayNMX = db.find_by("NMX", keys, search, nil, 10)
+    local arrayNOM = db.find_by("NOM", keys, search, nil, 10)
+
+    if #arrayNMX > 0 then
+
+        for i=1, #arrayNMX do
+            new_table[i] = arrayNMX[i]['TITULO']
+        end
+
+        -- table = new_table
+    end
+
+    if #arrayNOM > 0 then
+        for i=1, #arrayNMX do
+            new_table[i] = arrayNMX[i]['TITULO']
+        end
+    end
+
+    if #new_table > 0
+        table = new_table
+    end
 
     local tableViewColors = {
         rowColor = { default = { 1 }, over = { 30/255, 144/255, 1 } },
@@ -134,7 +166,7 @@ local function tableView(sceneGroup,table)
     -- Create a tableView
     tableView = widget.newTableView
     {
-        top = 32-oy,
+        top = actionbar.getHeight(),
         left = -ox,
         width = display.contentWidth+ox+ox, 
         height = display.contentHeight,--+oy+oy-32,
@@ -145,6 +177,39 @@ local function tableView(sceneGroup,table)
         onRowTouch = onRowTouch,
     }
     sceneGroup:insert( tableView )
+
+    local keys = {
+        [1] = "TITULO",
+        [2] = "PRODUCTO"
+    }
+
+    local arrayNMX = db.find_by("NMX", keys, search)
+    local arrayNOM = db.find_by("NOM", keys, search)
+
+    -- tableView:insertRow
+    -- {
+    --     isCategory = true,
+    --     rowHeight = rowHeight,
+    --     rowColor = rowColor,
+    --     lineColor = tableViewColors.lineColor,
+    --     params = v
+    -- }
+    -- for k,v in pairs(array) do
+    --     local isCategory = false
+    --     local rowHeight = 32
+    --     local rowColor = { 
+    --         default = tableViewColors.rowColor.default,
+    --         over = tableViewColors.rowColor.over,
+    --     }
+    --     tableView:insertRow
+    --     {
+    --         isCategory = isCategory,
+    --         rowHeight = rowHeight,
+    --         rowColor = rowColor,
+    --         lineColor = tableViewColors.lineColor,
+    --         params = { defaultLabelColor=tableViewColors.defaultLabelColor, catLabelColor=tableViewColors.catLabelColor }
+    --     }
+    -- end
 
     -- Create 75 rows
     for i = 1,#table do
@@ -176,8 +241,9 @@ function scene:show( event )
     local sceneGroup = self.view
     local phase = event.phase
 
-    if phase == "will" then     
-         tableView(sceneGroup,table1)
+    if phase == "will" then
+        search = event.params['search']
+        tableView(sceneGroup,table1, search)
     elseif phase == "did" then
     end 
 end

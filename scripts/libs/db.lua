@@ -19,7 +19,7 @@ db.init = function()
 	jsonNOM = json.decode( fileNOM:read( "*a" ) )
 end
 
-db.find_by = function( document, key, search, exact )
+db.find_by = function( document, key, search, exact, limit )
 	local _json = nil
 	local results = {}
 
@@ -32,15 +32,18 @@ db.find_by = function( document, key, search, exact )
 	for i=1, #_json do
 		local item = _json[i]
 
+		if limit and #results > limit then
+			break
+		end
+		
 		if exact then
 			if type(key) == "table" then
 				local exists = false
 
 				for j=1, #key do
 					if item[key[j]] == search then
-						print("si")
 						exists = true
-						-- results[#results+1] = item
+						results[#results+1] = item
 					end
 				end
 
@@ -49,17 +52,15 @@ db.find_by = function( document, key, search, exact )
 				end
 			else
 				if item[key] == search then
-					print("si")
 					results[#results+1] = item
 				end
 			end
 		else
 			if type(key) == "table" then
-				local exact = false
+				local exists = false
 
 				for j=1, #key do
 					if string.find( item[key[j]], search ) then
-						print("si")
 						exists = true
 						-- results[#results+1] = item
 					end
@@ -70,7 +71,6 @@ db.find_by = function( document, key, search, exact )
 				end
 			else
 				if string.find( tostring( item[key] ), search ) or tostring( item[key] ) == search then
-					print("si")
 					results[#results+1] = item
 				end
 			end
