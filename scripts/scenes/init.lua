@@ -165,7 +165,7 @@ end
 function scene:create( event )
     local sceneGroup = self.view
     print("create init.lua")
-    --actionbar.create()
+    actionbar.create(sceneGroup)
     addLayer(sceneGroup) 
     slide_menu.create(sceneGroup)
 end

@@ -1,13 +1,20 @@
-local actionbar = {}
 local composer = require( "composer" )
 local widget = require( "widget" )
+
+local actionbar = {}
+local objects = {}
 
 local _W = display.contentWidth
 local _H = display.contentHeight
 local halfW = display.contentCenterX
 local halfH = display.contentCenterY
-local backgroundMenu 
+local backgroundMenu = nil
+local actionbarGroup = nil
+local max_tam = _H*0.1
 
+actionbar.getHeigth = function()
+    return max_tam
+end
 
 local function textListener( event )
 
@@ -33,27 +40,30 @@ local function textListener( event )
 end
 
 actionbar.create = function (group)
-    
-    actionbar.searchField = native.newTextField( _W*0.43, _H*0.05, _W*0.8, _H*0.07 )
-    actionbar.searchField:addEventListener( "userInput", textListener )
-    actionbar.searchField.placeholder = "Buscar"
-    actionbar.searchField:setReturnKey("search")
+    actionbarGroup = display.newGroup()
+
+    objects.searchField = native.newTextField( _W*0.43, _H*0.05, _W*0.8, _H*0.07 )
+    objects.searchField:addEventListener( "userInput", textListener )
+    objects.searchField.placeholder = "Buscar"
+    objects.searchField:setReturnKey("search")
     -- -- Create the widget
-    local searchButton = widget.newButton
+    objects.searchButton = widget.newButton
     {
         id = "searchButton",
         label = "B",
         onEvent = handleButtonEvent,
-        width = actionbar.searchField.width*0.20,
-        height = actionbar.searchField.height
+        width = objects.searchField.width*0.20,
+        height = objects.searchField.height
     }
-    searchButton.x = _W*0.5+actionbar.searchField.width*0.5
-    searchButton.y = actionbar.searchField.y
+    objects.searchButton.x = _W*0.5+objects.searchField.width*0.5
+    objects.searchButton.y = objects.searchField.y
 
-    actionbar.searchButton = searchButton
+    actionbarGroup:insert( objects.searchField )
+    actionbarGroup:insert( objects.searchButton )
 
-    group:insert(actionbar.searchField)
-    group:insert(actionbar.searchButton)
+    actionbarGroup:toBack()
+
+    group:insert( actionbarGroup )
 end
 --------------------------------End Functions-------------------------------------------------------------------
 

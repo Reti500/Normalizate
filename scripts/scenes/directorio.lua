@@ -7,6 +7,8 @@ local _H = display.contentHeight
 local halfW = display.contentCenterX
 local halfH = display.contentCenterY
 
+local body = nil
+local bg = nil
 ------------Functions.-----------------------------------------------------------------------
 
 --------------------------------End Functions-------------------------------------------------------------------
@@ -15,6 +17,7 @@ local halfH = display.contentCenterY
 function scene:create( event )
     local sceneGroup = self.view
 
+    body = display.newGroup()
     actionbar.create(sceneGroup)
 end
 
@@ -22,8 +25,11 @@ function scene:show( event )
     local sceneGroup = self.view
     local phase = event.phase
 
-    if phase == "will" then     
+    if phase == "will" then
+        
 
+        bg = display.newRect( body, 0, 0, _W, 10 )
+        body.y = actionbar.getHeigth()
     elseif phase == "did" then
     end 
 end
