@@ -20,7 +20,7 @@ local myRectangle = nil
 local back
 slide_menu.move = true
 ------------Functions.-----------------------------------------------------------------------
-local listener = function( obj )
+local  listener = function( obj )
    --print( "Cerro")
     listenersButtons(false)
    transition.to( back, { time=200, alpha = 0.43 } )
@@ -31,7 +31,7 @@ local listener1 = function( obj )
     listenersButtons(true)
    transition.to( back, { time=200, alpha = 0 } )
 end
-slide_menu.openClose= function( event )
+slide_menu.openClose= function(  )
     if isOpen then
         listenersButtons(true)
         isOpen = false
@@ -43,7 +43,7 @@ slide_menu.openClose= function( event )
     end
 end
 
-local function moveListener(event)
+slide_menu.moveListener = function(event)
    if slide_menu.move then
        if event.phase == "moved" then
           
@@ -107,7 +107,7 @@ slide_menu.create = function (sceneGroup)
     myRectangle = display.newRect( _W*0.5, _H*0.5, _W, _H )  
     myRectangle:setFillColor( 0.5 )
     myRectangle.alpha = 0.01  
-    myRectangle:addEventListener("touch",moveListener)
+    myRectangle:addEventListener("touch",slide_menu.moveListener)
 
     -- local close = display.newRect( _W*0.75, _H*0.5, _W*0.5, _H )  
     -- close:setFillColor( 0.5 )
@@ -141,7 +141,7 @@ slide_menu.create = function (sceneGroup)
     -- tab.x = _W*0.95
     -- tab.y = _H*0.95
 
-    imageProfile = display.newImageRect( "Icon@2x.png", backgroundMenu.width, _H*0.281)
+    imageProfile = display.newImageRect( "images/foto.jpg", backgroundMenu.width, _H*0.281)
     imageProfile.x = posInit
     imageProfile.y = limit_actionbar
     imageProfile.anchorX = 0.5

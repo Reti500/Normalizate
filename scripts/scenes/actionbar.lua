@@ -1,6 +1,7 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
 local db = require( "scripts.libs.db" )
+-- local slide_menu = require ("scripts.scenes.slide_menu")
 
 local actionbar = {}
 local objects = {}
@@ -27,7 +28,12 @@ local resultsList = nil
 actionbar.getHeight = function()
     return max_tam
 end
-
+local function handleButtonEvent( event )
+    if event.target.id == "menuButton" then
+        print("puto")
+      --  slide_menu.openClose()
+    end
+end
 
 local function textListener( event )
 
@@ -161,9 +167,9 @@ end
 local function createMenuButton( group )
     menuButton = widget.newButton
     {
-        id = "manuButton",
+        id = "menuButton",
         -- label = "~",
-        onEvent = handleButtonEvent,
+        onRelease = handleButtonEvent,
         defaultFile = path.."menu.png",
         width = _W*0.1,
         height = max_tam - (_H*0.02)

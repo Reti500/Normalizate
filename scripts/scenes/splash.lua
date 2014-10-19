@@ -41,12 +41,12 @@ local function ui(group)
     local function listener( event )
         local options = {
         effect = "fade",
-        time = 100,
+        time = 1000,
         }
         composer.gotoScene("scripts.scenes.init",options)
     end
 
-    timer.performWithDelay( 100, listener )
+    timer.performWithDelay( 1000, listener )
     
     group:insert(spinner)
 end        
