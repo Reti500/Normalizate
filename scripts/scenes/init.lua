@@ -59,6 +59,10 @@ local function handleButtonEvent( event )
             }
         }
         composer.showOverlay( "scripts.scenes.search", options )
+        
+    elseif  "directoryButton" == event.target.id  then
+        print("llamando")
+        system.openURL( "tel:415-867-5309" )        
     end
 end
 
