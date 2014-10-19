@@ -75,10 +75,22 @@ local function handleButtonEvent( event )
     elseif  "normButton" == event.target.id  then
         if composer.data.normIsActive == false then
             --poner azul
+            norm.alpha = 1
             composer.data.normIsActive = true
         else 
             --poner  normal
+            norm.alpha = 0
             composer.data.normIsActive = false
+        end 
+    elseif  "normMXButton" == event.target.id  then
+        if composer.data.normMXIsActive == false then
+            --poner azul
+            normMX.alpha = 1
+            composer.data.normMXIsActive = true
+        else 
+            --poner  normal
+            normMX.alpha = 0
+            composer.data.normMXIsActive = false
         end 
         --composer.showOverlay( "scripts.scenes.one_result", options )
     elseif  "dependenceButton" == event.target.id and event.phase == "ended"  then
@@ -154,6 +166,11 @@ local function addLayer(sceneGroup)
     normButton.x = _W*0.25
     normButton.y = _H*0.15 +_W*0.3
 
+    norm = display.newImageRect( "images/init/nom_push.png", _W*0.25, _W*0.32)
+    norm.x = normButton.x
+    norm.y = normButton.y
+    norm.alpha = 0
+
     normMXButton = widget.newButton
     {
         id = "normMXButton",
@@ -165,6 +182,11 @@ local function addLayer(sceneGroup)
     }
     normMXButton.x = _W*0.75
     normMXButton.y = _H*0.15+_W*0.3
+
+    normMX = display.newImageRect( "images/init/nmx_push.png", _W*0.25, _W*0.32)
+    normMX.x = normMXButton.x
+    normMX.y = normMXButton.y
+    normMX.alpha = 0
 
     
     backBut = display.newImageRect( "images/init/rueda.png", _W*0.53, _W*0.53)
@@ -247,6 +269,7 @@ local function addLayer(sceneGroup)
     sceneGroup:insert(backBut_producto)
     
     sceneGroup:insert(normButton)
+    sceneGroup:insert(norm)
     sceneGroup:insert(normMXButton)
     sceneGroup:insert(productButton)
     sceneGroup:insert(dependenceButton)
