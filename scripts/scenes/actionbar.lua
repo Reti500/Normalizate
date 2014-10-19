@@ -159,7 +159,7 @@ local function createNotificationButton( group )
 end
 
 local function createMenuButton( group )
-   menuButton = widget.newButton
+    menuButton = widget.newButton
     {
         id = "manuButton",
         -- label = "~",
