@@ -54,7 +54,7 @@ local function handleButtonEvent( event )
          backBut_dependencia.alpha = 1
     elseif  "productButton" == event.target.id and event.phase == "began" then
         print("mostrando")
-         backBut_producto.alpha = 1
+        backBut_producto.alpha = 1
     else
         backBut_avanzado.alpha = 0
         backBut_dependencia.alpha = 0
@@ -83,16 +83,17 @@ local function handleButtonEvent( event )
             composer.data.normIsActive = false
         end 
     elseif  "normMXButton" == event.target.id and event.phase == "ended" then
-        if composer.data.normMXIsActive == false then
-            --poner azul
-            normMX.alpha = 1
-            composer.data.normMXIsActive = true
-        else 
-            --poner  normal
-            normMX.alpha = 0
-            composer.data.normMXIsActive = false
-        end 
-        --composer.showOverlay( "scripts.scenes.one_result", options )
+        -- if composer.data.normMXIsActive == false then
+        --     --poner azul
+        --     normMX.alpha = 1
+        --     composer.data.normMXIsActive = true
+        -- else 
+        --     --poner  normal
+        --     normMX.alpha = 0
+        --     composer.data.normMXIsActive = false
+        -- end
+         composer.showOverlay( "scripts.scenes.one_result", options ) 
+       
     elseif  "dependenceButton" == event.target.id and event.phase == "ended"  then
         local options = 
             {
@@ -129,6 +130,7 @@ local function handleButtonEvent( event )
                 search_type = "product",
             }
         }
+        composer.removeScene("scripts.scenes.init")
         composer.gotoScene( "scripts.scenes.directorio", options )       
     end
 end
@@ -196,8 +198,6 @@ local function addLayer(sceneGroup)
     else
         normMX.alpha = 0
     end
-
-    normMX.alpha = 0
 
     
     backBut = display.newImageRect( "images/init/rueda.png", _W*0.53, _W*0.53)

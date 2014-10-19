@@ -46,14 +46,14 @@ end
 local function addLayer(sceneGroup)
 
     
-    local background = display.newImageRect( "images/slide_menu/background@2x.png", _W*0.95, _H*0.95)
+    local background = display.newImageRect( "images/init/pop_up.png", _W*0.95, _H*0.82)
     background.x = _W*0.5
-    background.y = _H*0.5
+    background.y = _H*0.55
 
-    local titleTxt = display.newText( "Norma", _W*0.5, _H*0.1, native.systemFont, 25 )
+    local titleTxt = display.newText( "Norma", _W*0.5, _H*0.2, native.systemFont, 25 )
     titleTxt:setFillColor( 1, 0, 0 )
 
-    local norm_id = display.newText( "NOM-002-FITO-2000", _W*0.5, _H*0.18, native.systemFont, 20 )
+    local norm_id = display.newText( "NOM-002-FITO-2000", _W*0.5, _H*0.28, native.systemFont, 20 )
     norm_id:setFillColor( 1, 0, 0 )
 
     -- Create the widget
@@ -70,12 +70,12 @@ local function addLayer(sceneGroup)
         listener = scrollListener
     }
     scrollView.x = _W*0.5
-    scrollView.y = _H*0.53
+    scrollView.y = _H*0.6
     scrollView.width = _W*0.85
     scrollView.height = _H*0.6
 
     local normTxt = display.newText( "Hello World!", _W*0.5+10, _H*0.53, scrollView.width, scrollView.height, native.systemFont, 16 )
-    normTxt:setFillColor( 1, 1, 1 )
+    normTxt:setFillColor( 0,0,0)
 
     scrollView:insert(normTxt)
 
