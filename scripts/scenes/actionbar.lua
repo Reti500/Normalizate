@@ -32,8 +32,8 @@ local function textListener( event )
     end
 end
 
-actionbar.create = function ()
-      -- Create text field
+actionbar.create = function (group)
+    
     actionbar.searchField = native.newTextField( _W*0.43, _H*0.05, _W*0.8, _H*0.07 )
     actionbar.searchField:addEventListener( "userInput", textListener )
     actionbar.searchField.placeholder = "Buscar"
@@ -49,6 +49,11 @@ actionbar.create = function ()
     }
     searchButton.x = _W*0.5+actionbar.searchField.width*0.5
     searchButton.y = actionbar.searchField.y
+
+    actionbar.searchButton = searchButton
+
+    group:insert(actionbar.searchField)
+    group:insert(actionbar.searchButton)
 end
 --------------------------------End Functions-------------------------------------------------------------------
 
