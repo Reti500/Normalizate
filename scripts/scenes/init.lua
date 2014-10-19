@@ -19,18 +19,46 @@ local dependenceButton
 local advancedButton
 local directoryButton
 
-buttons = {}
-buttons[1] = productButton
-buttons[2] = normButton
-buttons[3] = normMXButton
-buttons[4] = dependenceButton
-buttons[5] = advancedButton
-buttons[6] = directoryButton
-
  -- Function to handle button events
 local function handleButtonEvent( event )
-    if  "ended" == event.phase  then
-        print( "Button was pressed and released" )
+    if  "advancedButton" == event.target.id  then
+        local options = 
+        {
+            effect = "fade",
+            time = 500,
+            isModal = true,
+            params = 
+            {
+                search_type = "advance",
+            }
+        }
+        composer.showOverlay( "scripts.scenes.search", options )
+    elseif  "normButton" == event.target.id  then
+        composer.showOverlay( "scripts.scenes.one_result", options )
+    elseif  "dependenceButton" == event.target.id  then
+        local options = 
+            {
+                effect = "fade",
+                time = 500,
+                isModal = true,
+                params = 
+                {
+                    search_type = "dependence",
+                }
+            }
+        composer.showOverlay( "scripts.scenes.search", options )
+    elseif  "productButton" == event.target.id  then
+        local options = 
+        {
+            effect = "fade",
+            time = 500,
+            isModal = true,
+            params = 
+            {
+                search_type = "product",
+            }
+        }
+        composer.showOverlay( "scripts.scenes.search", options )
     end
 end
 
@@ -49,7 +77,7 @@ local function addLayer(sceneGroup)
     {
         id = "normButton",
         label = "NOM",
-        onEvent = handleButtonEvent,
+        onRelease = handleButtonEvent,
         width = _W*0.2,
         height = _W*0.2
     }
@@ -60,7 +88,7 @@ local function addLayer(sceneGroup)
     {
         id = "normMXButton",
         label = "NOMX",
-        onEvent = handleButtonEvent,
+        onRelease = handleButtonEvent,
         width = _W*0.2,
         height = _W*0.2
     }
@@ -71,7 +99,7 @@ local function addLayer(sceneGroup)
     {
         id = "productButton",
         label = "Producto",
-        onEvent = handleButtonEvent,
+        onRelease = handleButtonEvent,
         width = _W*0.15,
         height = _W*0.15
     }
@@ -82,7 +110,7 @@ local function addLayer(sceneGroup)
     {
         id = "dependenceButton",
         label = "Por Dependencia",
-        onEvent = handleButtonEvent,
+        onRelease = handleButtonEvent,
         width = _W*0.15,
         height = _W*0.15
     }
@@ -93,7 +121,7 @@ local function addLayer(sceneGroup)
     {
         id = "advancedButton",
         label = "Avanzada",
-        onEvent = handleButtonEvent,
+        onRelease = handleButtonEvent,
         width = _W*0.15,
         height = _W*0.15
     }
@@ -104,7 +132,7 @@ local function addLayer(sceneGroup)
     {
         id = "directoryButton",
         label = "Directorio",
-        onEvent = handleButtonEvent,
+        onRelease = handleButtonEvent,
         width = _W*0.15,
         height = _W*0.15
     }
@@ -123,7 +151,8 @@ end
 -----------------------------------Scenes Functions---------------------------------
 function scene:create( event )
     local sceneGroup = self.view
-    actionbar.create()
+    print("create init.lua")
+    --actionbar.create()
     addLayer(sceneGroup) 
     slide_menu.create(sceneGroup)
 end
@@ -133,11 +162,12 @@ function scene:show( event )
     local phase = event.phase
 
     if phase == "will" then 
-        
+        print("show will init.lua")
        
       
        
     elseif phase == "did" then
+        print("show did init.lua")
     end 
 end
 
@@ -146,14 +176,18 @@ function scene:hide( event )
     local phase = event.phase
     
     if event.phase == "will" then
+        print("hide will init.lua")
       
     elseif phase == "did" then
+        print("hide did init.lua")
     end 
 end
 
 
 function scene:destroy( event )
     local sceneGroup = self.view
+    print("destroy init.lua")
+
 end
 ------------------------------End Funcitons--------------------------------------
 ---------------------------------------------------------------------------------
