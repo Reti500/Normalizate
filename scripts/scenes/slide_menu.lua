@@ -21,6 +21,15 @@ slide_menu.move = true
 local listener1 = function( obj )
    --print( "Cerro")
 end
+local function openMenu( event )
+    if isOpen then
+        isOpen = false
+        slide_menu.close()
+    else
+        isOpen = true
+        slide_menu.open()
+    end
+end
 
 local function moveListener(event)
    if slide_menu.move then
@@ -80,8 +89,8 @@ local function moveListener(event)
 end
 
 slide_menu.create = function (sceneGroup)
-   
     
+
     myRectangle = display.newRect( _W*0.5, _H*0.5, _W, _H )  
     myRectangle:setFillColor( 0.5 )
     myRectangle.alpha = 0.01  
@@ -98,6 +107,17 @@ slide_menu.create = function (sceneGroup)
     backgroundMenu.y = _H*0.6 
     backgroundMenu.anchorX = 0.5
     backgroundMenu:toFront()    
+
+    tab = widget.newButton
+    {
+        id = "tab",
+        label = "TAB",
+        onRelease = openMenu,
+        width = _W*0.35,
+        height = _W*0.15
+    }
+    tab.x = _W*0.95
+    tab.y = _H*0.95
 
     imageProfile = display.newImageRect( "Icon@2x.png", backgroundMenu.width, _H*0.25)
     imageProfile.x = posInit
@@ -186,6 +206,7 @@ slide_menu.create = function (sceneGroup)
     
 
     group:insert( backgroundMenu )
+    group:insert( tab )
     --group:insert( close )
     group:insert( imageProfile )
     group:insert( chatButton )
