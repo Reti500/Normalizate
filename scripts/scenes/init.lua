@@ -83,16 +83,16 @@ local function handleButtonEvent( event )
             composer.data.normIsActive = false
         end 
     elseif  "normMXButton" == event.target.id and event.phase == "ended" then
-        -- if composer.data.normMXIsActive == false then
-        --     --poner azul
-        --     normMX.alpha = 1
-        --     composer.data.normMXIsActive = true
-        -- else 
-        --     --poner  normal
-        --     normMX.alpha = 0
-        --     composer.data.normMXIsActive = false
-        -- end
-         composer.showOverlay( "scripts.scenes.one_result", options ) 
+        if composer.data.normMXIsActive == false then
+            --poner azul
+            normMX.alpha = 1
+            composer.data.normMXIsActive = true
+        else 
+            --poner  normal
+            normMX.alpha = 0
+            composer.data.normMXIsActive = false
+        end
+        --composer.showOverlay( "scripts.scenes.one_result", options ) 
        
     elseif  "dependenceButton" == event.target.id and event.phase == "ended"  then
         local options = 
